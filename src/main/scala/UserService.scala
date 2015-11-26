@@ -37,10 +37,12 @@ object UserService {
   }
 
   def main(args: Array[String]): Unit = {
-    val user = UserService.getUser("bob")(AuthService.authUser)(UserRepo.selectUser)
-    println(s"bob => $user")
-    val userBobby = UserService.getUser("bobby")(AuthService.authUser)(UserRepo.selectUser)
-    println(s"bobby => $userBobby")
+    (1 to 10) foreach { i =>
+      val user = UserService.getUser("bob")(AuthService.authUser)(UserRepo.selectUser)
+      println(s"bob => $user")
+      val userBobby = UserService.getUser("bobby")(AuthService.authUser)(UserRepo.selectUser)
+      println(s"bobby => $userBobby")
+    }
   }
 }
 
