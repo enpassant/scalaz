@@ -44,7 +44,7 @@ object OktvSimpleCode {
   {
     val (intervals, currentInterval) = state
     (currentInterval, value) match {
-      case (`emptyInterval`, 0) => (intervals, currentInterval)
+      case (`emptyInterval`, 0) => state
       case (_, 0) => (currentInterval :: intervals, emptyInterval)
       case _ => (intervals, currentInterval.add(value))
     }
