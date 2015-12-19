@@ -8,7 +8,7 @@ class OktvSimpleCodeSpec extends FunSpec with Matchers {
 
     it("should returns intervals' length and max: (2,4), (3,3), (3,5)") {
       val intervals = calcIntervals2(X)
-      intervals shouldBe List(IntervalLengthAndMax(2,4), IntervalLengthAndMax(3,3), IntervalLengthAndMax(3,5))
+      intervals shouldBe List(new Interval(2,4), new Interval(3,3), new Interval(3,5))
     }
   }
 }

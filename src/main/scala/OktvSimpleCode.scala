@@ -19,13 +19,13 @@ object OktvSimpleCode {
     (A, B.toList, C.toList)
   }
 
-  case class IntervalLengthAndMax(length: Int, max: Int) {
-    def add(value: Int) = IntervalLengthAndMax(length + 1, math.max(max, value))
+  case class Interval(length: Int, max: Int) {
+    def add(value: Int) = Interval(length + 1, math.max(max, value))
   }
-  private val emptyInterval = IntervalLengthAndMax(0, 0)
+  private val emptyInterval = Interval(0, 0)
 
-  def calcIntervals(values: List[Int]): (List[IntervalLengthAndMax]) = {
-    val initState = (List.empty[IntervalLengthAndMax], emptyInterval)
+  def calcIntervals(values: List[Int]): (List[Interval]) = {
+    val initState = (List.empty[Interval], emptyInterval)
     val (intervals, currentInterval) = values.foldLeft(initState) {
       case ((intervals, currentInterval), value) =>
         (currentInterval, value) match {
@@ -38,22 +38,19 @@ object OktvSimpleCode {
     else intervals.reverse
   }
 
-  private def calcNextState(
-    state: (List[IntervalLengthAndMax], IntervalLengthAndMax),
-    value: Int) =
-  {
-    val (intervals, currentInterval) = state
+  private def calcNextState(intervals: List[Interval], value: Int) = {
+    val currentInterval = intervals.head
     (currentInterval, value) match {
-      case (`emptyInterval`, 0) => state
-      case (_, 0) => (currentInterval :: intervals, emptyInterval)
-      case _ => (intervals, currentInterval.add(value))
+      case (`emptyInterval`, 0) => intervals
+      case (_, 0) => emptyInterval :: intervals
+      case _ => currentInterval.add(value) :: intervals.tail
     }
   }
 
-  def calcIntervals2(values: List[Int]): (List[IntervalLengthAndMax]) = {
-    val initState = (List.empty[IntervalLengthAndMax], emptyInterval)
-    val (intervals, currentInterval) = values.foldLeft(initState)(calcNextState)
-    if (currentInterval != emptyInterval) (currentInterval :: intervals).reverse
+  def calcIntervals2(values: List[Int]): List[Interval] = {
+    val initState = List(emptyInterval)
+    val intervals = values.foldLeft(initState)(calcNextState)
+    if (intervals.head == emptyInterval) intervals.tail.reverse
     else intervals.reverse
   }
 
