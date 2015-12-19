@@ -22,7 +22,7 @@ object OktvSimpleCode {
   case class Interval(length: Int, max: Int) {
     def add(value: Int) = Interval(length + 1, math.max(max, value))
   }
-  private val emptyInterval = Interval(0, 0)
+  private val emptyInterval = Interval(0, Int.MinValue)
 
   def calcIntervals(values: List[Int]): (List[Interval]) = {
     val initState = (List.empty[Interval], emptyInterval)
@@ -50,6 +50,22 @@ object OktvSimpleCode {
   def calcIntervals2(values: List[Int]): List[Interval] = {
     val initState = List(emptyInterval)
     val intervals = values.foldLeft(initState)(calcNextState)
+    if (intervals.head == emptyInterval) intervals.tail.reverse
+    else intervals.reverse
+  }
+
+  private def calcNextState3(intervals: List[Interval], optValue: Option[Int]) = {
+    val currentInterval = intervals.head
+    (currentInterval, optValue) match {
+      case (`emptyInterval`, None) => intervals
+      case (_, None) => emptyInterval :: intervals
+      case (_, Some(value)) => currentInterval.add(value) :: intervals.tail
+    }
+  }
+
+  def calcIntervals3(values: List[Option[Int]]): List[Interval] = {
+    val initState = List(emptyInterval)
+    val intervals = values.foldLeft(initState)(calcNextState3)
     if (intervals.head == emptyInterval) intervals.tail.reverse
     else intervals.reverse
   }
